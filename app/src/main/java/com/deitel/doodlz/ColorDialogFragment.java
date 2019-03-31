@@ -33,7 +33,7 @@ public class ColorDialogFragment extends DialogFragment {
       builder.setView(colorDialogView); // add GUI to dialog
 
       // set the AlertDialog's message
-      builder.setTitle(R.string.title_color_dialog);
+      builder.setTitle(getTitle());
 
       // get the color SeekBars and set their onChange listeners
       alphaSeekBar = (SeekBar) colorDialogView.findViewById(
@@ -70,6 +70,10 @@ public class ColorDialogFragment extends DialogFragment {
       );
 
       return builder.create(); // return dialog
+   }
+
+   protected int getTitle() {
+      return R.string.title_color_dialog;
    }
 
    // gets a reference to the MainActivityFragment
