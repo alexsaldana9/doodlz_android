@@ -20,7 +20,7 @@ public class ColorDialogFragment extends DialogFragment {
    private SeekBar greenSeekBar;
    private SeekBar blueSeekBar;
    private View colorView;
-   private int color;
+   protected int color;
 
    // create an AlertDialog and return it
    @Override
@@ -54,7 +54,7 @@ public class ColorDialogFragment extends DialogFragment {
 
       // use current drawing color to set SeekBar values
       final DoodleView doodleView = getDoodleFragment().getDoodleView();
-      color = doodleView.getDrawingColor();
+      color = getColorDoodleView(doodleView);
       alphaSeekBar.setProgress(Color.alpha(color));
       redSeekBar.setProgress(Color.red(color));
       greenSeekBar.setProgress(Color.green(color));
@@ -64,12 +64,20 @@ public class ColorDialogFragment extends DialogFragment {
       builder.setPositiveButton(R.string.button_set_color,
          new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-               doodleView.setDrawingColor(color);
+               setColorDoodleView(doodleView);
             }
          }
       );
 
       return builder.create(); // return dialog
+   }
+
+   protected int getColorDoodleView(DoodleView doodleView) {
+      return doodleView.getDrawingColor();
+   }
+
+   protected void setColorDoodleView(DoodleView doodleView) {
+      doodleView.setDrawingColor(color);
    }
 
    protected int getTitle() {

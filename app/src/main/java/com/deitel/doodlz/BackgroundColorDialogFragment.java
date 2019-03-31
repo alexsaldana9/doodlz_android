@@ -6,5 +6,13 @@ public class BackgroundColorDialogFragment extends ColorDialogFragment {
         return R.string.title_background_color_dialog;
     }
 
+    @Override
+    protected int getColorDoodleView(DoodleView doodleView){
+        return doodleView.getDrawingBackgroundColor();
+    }
 
+    @Override
+    protected void setColorDoodleView(DoodleView doodleView) {
+        doodleView.setDrawingBackgroundColor(color);
+    }
 }
