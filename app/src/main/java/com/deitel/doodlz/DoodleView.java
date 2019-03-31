@@ -60,14 +60,14 @@ public class DoodleView extends View {
         bitmap = Bitmap.createBitmap(getWidth(), getHeight(),
                 Bitmap.Config.ARGB_8888);
         bitmapCanvas = new Canvas(bitmap);
-        bitmap.eraseColor(Color.WHITE); // erase the Bitmap with white
+        bitmap.eraseColor(paintBackground.getColor()); // erase the Bitmap with white
     }
 
     // clear the painting
     public void clear() {
         pathMap.clear(); // remove all paths
         previousPointMap.clear(); // remove all previous points
-        bitmap.eraseColor(Color.WHITE); // clear the bitmap
+        bitmap.eraseColor(paintBackground.getColor()); // clear the bitmap
         invalidate(); // refresh the screen
     }
 
@@ -87,6 +87,7 @@ public class DoodleView extends View {
 
     public void setDrawingBackgroundColor(int color) {
         paintBackground.setColor(color);
+        clear();
     }
 
     // set the painted line's width
