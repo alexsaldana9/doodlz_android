@@ -29,7 +29,7 @@ public class DoodleView extends View {
     private Canvas bitmapCanvas; // used to to draw on the bitmap
     private final Paint paintScreen; // used to draw bitmap onto screen
     private final Paint paintLine; // used to draw lines onto bitmap
-    private final Paint paintBackground; // used to draw the background onto bitmap
+    private int drawingBackgroundColor; // used to draw the background onto bitmap
 
     // Maps of current Paths being drawn and Points in those Paths
     private final Map<Integer, Path> pathMap = new HashMap<>();
@@ -49,9 +49,7 @@ public class DoodleView extends View {
         paintLine.setStrokeCap(Paint.Cap.ROUND); // rounded line ends
 
         // set the initial display settings for the background color
-        paintBackground = new Paint();
-        paintBackground.setAntiAlias(true); // smooth edges of drawn line
-        paintBackground.setColor(Color.WHITE); // default color is black
+        drawingBackgroundColor = Color.WHITE; // default color is white
     }
 
     // creates Bitmap and Canvas based on View's size
@@ -60,14 +58,14 @@ public class DoodleView extends View {
         bitmap = Bitmap.createBitmap(getWidth(), getHeight(),
                 Bitmap.Config.ARGB_8888);
         bitmapCanvas = new Canvas(bitmap);
-        bitmap.eraseColor(paintBackground.getColor()); // erase the Bitmap with white
+        bitmap.eraseColor(drawingBackgroundColor); // erase the Bitmap with white
     }
 
     // clear the painting
     public void clear() {
         pathMap.clear(); // remove all paths
         previousPointMap.clear(); // remove all previous points
-        bitmap.eraseColor(paintBackground.getColor()); // clear the bitmap
+        bitmap.eraseColor(drawingBackgroundColor); // clear the bitmap
         invalidate(); // refresh the screen
     }
 
@@ -82,11 +80,11 @@ public class DoodleView extends View {
     }
 
     public int getDrawingBackgroundColor() {
-        return paintBackground.getColor();
+        return drawingBackgroundColor;
     }
 
     public void setDrawingBackgroundColor(int color) {
-        paintBackground.setColor(color);
+        drawingBackgroundColor = color;
         clear();
     }
 
