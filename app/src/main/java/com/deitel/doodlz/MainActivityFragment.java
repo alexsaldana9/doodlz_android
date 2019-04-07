@@ -178,10 +178,8 @@ public class MainActivityFragment extends Fragment {
     private void saveImage() {
         // checks if the app does not have permission needed
         // to save the image
-      if (getContext().checkSelfPermission(
-         Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
-         PackageManager.PERMISSION_GRANTED) {
-
+        int permissions = getContext().checkCallingOrSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (permissions != PackageManager.PERMISSION_GRANTED) {
             // shows an explanation for why permission is needed
             if (shouldShowRequestPermissionRationale(
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
