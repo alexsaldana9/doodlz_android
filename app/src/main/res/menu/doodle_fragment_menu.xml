@@ -42,4 +42,11 @@
       android:icon="@drawable/ic_print_24dp"
       app:showAsAction="ifRoom">
    </item>
+
+   <item
+       android:id="@+id/image"
+       android:title="Image"
+       android:icon="@drawable/ic_photo_library_black_24dp"
+       app:showAsAction="ifRoom"
+      ></item>
 </menu>
