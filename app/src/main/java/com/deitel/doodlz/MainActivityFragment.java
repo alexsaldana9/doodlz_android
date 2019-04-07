@@ -3,15 +3,21 @@
 package com.deitel.doodlz;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,6 +25,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
+import java.io.IOException;
+
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 
 public class MainActivityFragment extends Fragment {
     private DoodleView doodleView; // handles touch events and draws
@@ -33,6 +43,8 @@ public class MainActivityFragment extends Fragment {
     // used to identify the request for using external storage, which
     // the save image feature needs
     private static final int SAVE_IMAGE_PERMISSION_REQUEST_CODE = 1;
+    private static final int READ_EXTERNAL_STORAGE_REQUEST_CODE = 2;
+    private static final int PICK_IMAGE_REQUEST_CODE = 3;
 
     // called when Fragment's view needs to be created
     @Override
@@ -169,7 +181,7 @@ public class MainActivityFragment extends Fragment {
                 doodleView.printImage(); // print the current images
                 return true; // consume the menu event
             case R.id.image:
-                //TODO: select the photo
+                pickImage();
                 return true;
         }
 
@@ -230,6 +242,10 @@ public class MainActivityFragment extends Fragment {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
                     doodleView.saveImage(); // save the image
                 return;
+            case READ_EXTERNAL_STORAGE_REQUEST_CODE:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                    pickImage();
+                return;
         }
     }
 
@@ -241,6 +257,49 @@ public class MainActivityFragment extends Fragment {
     // indicates whether a dialog is displayed
     public void setDialogOnScreen(boolean visible) {
         dialogOnScreen = visible;
+    }
+
+    private void pickImage() {
+        if (getContext().checkCallingOrSelfPermission(READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
+            getIntent.setType("image/*");
+
+            Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            pickIntent.setType("image/*");
+
+            Intent intent = Intent.createChooser(getIntent, "Select Image");
+            intent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
+
+            startActivityForResult(intent, PICK_IMAGE_REQUEST_CODE);
+        } else {
+            requestPermissions(
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    READ_EXTERNAL_STORAGE_REQUEST_CODE);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST_CODE) {
+            if (resultCode != Activity.RESULT_OK) {
+                return;
+            }
+
+            Uri imgUri = data.getData();
+            System.out.println(String.format("Selected Image; uri: %s", imgUri));
+            try {
+                Bitmap bitmap = uriToBitmap(imgUri);
+                doodleView.setBackgroundImage(bitmap);
+            } catch (IOException e) {
+                System.out.println(String.format("ERROR: %s", e));
+            }
+        }
+    }
+
+    private Bitmap uriToBitmap(Uri uri) throws IOException {
+        return MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), uri);
     }
 }
 

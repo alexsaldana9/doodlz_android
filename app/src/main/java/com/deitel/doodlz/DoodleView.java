@@ -257,6 +257,10 @@ public class DoodleView extends View {
             message.show();
         }
     }
+
+    public void setBackgroundImage(Bitmap bitmap) {
+        //TODO: implement this
+    }
 }
 
 /**************************************************************************
