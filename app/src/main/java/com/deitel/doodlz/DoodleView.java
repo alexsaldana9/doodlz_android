@@ -164,7 +164,7 @@ public class DoodleView extends View {
         int updatedLineWidth = lineWidth + widthMultiplier;
         paintLine.setStrokeWidth(updatedLineWidth);
 
-        System.out.println(String.format("Touch Moved; pressure: %.4f; lineWidth: %d; updatedLineWidth: %d", pressure, lineWidth, updatedLineWidth));
+//        System.out.println(String.format("Touch Moved; pressure: %.4f; lineWidth: %d; updatedLineWidth: %d", pressure, lineWidth, updatedLineWidth));
 
 
         // for each of the pointers in the given MotionEvent
