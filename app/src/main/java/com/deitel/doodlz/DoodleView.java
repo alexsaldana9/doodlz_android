@@ -258,8 +258,8 @@ public class DoodleView extends View {
         }
     }
 
-    public void setBackgroundImage(Bitmap bitmap) {
-        //TODO: implement this
+    public void setBackgroundImage(Bitmap selectedImage) {
+        bitmapCanvas.drawBitmap(selectedImage, 0, 0, paintScreen);
     }
 }
 
