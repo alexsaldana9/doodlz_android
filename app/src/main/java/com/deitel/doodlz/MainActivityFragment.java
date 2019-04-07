@@ -168,6 +168,9 @@ public class MainActivityFragment extends Fragment {
             case R.id.print:
                 doodleView.printImage(); // print the current images
                 return true; // consume the menu event
+            case R.id.image:
+                //TODO: select the photo
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
