@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.provider.MediaStore;
 import android.support.v4.print.PrintHelper;
 import android.util.AttributeSet;
@@ -259,7 +260,12 @@ public class DoodleView extends View {
     }
 
     public void setBackgroundImage(Bitmap selectedImage) {
-        bitmapCanvas.drawBitmap(selectedImage, 0, 0, paintScreen);
+        // this draws the image unscaled, only a portion may be visible
+//        bitmapCanvas.drawBitmap(selectedImage, 0, 0, paintScreen);
+
+        //this scales the image to fit into the target rectangle
+        Rect targetRect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+        bitmapCanvas.drawBitmap(selectedImage, null, targetRect, paintScreen);
     }
 }
 
