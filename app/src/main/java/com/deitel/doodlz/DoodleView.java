@@ -30,6 +30,7 @@ public class DoodleView extends View {
     private final Paint paintScreen; // used to draw bitmap onto screen
     private final Paint paintLine; // used to draw lines onto bitmap
     private int drawingBackgroundColor; // used to draw the background onto bitmap
+    private int lineWidth = 5;
 
     // Maps of current Paths being drawn and Points in those Paths
     private final Map<Integer, Path> pathMap = new HashMap<>();
@@ -45,7 +46,6 @@ public class DoodleView extends View {
         paintLine.setAntiAlias(true); // smooth edges of drawn line
         paintLine.setColor(Color.BLACK); // default color is black
         paintLine.setStyle(Paint.Style.STROKE); // solid line
-        paintLine.setStrokeWidth(5); // set the default line width
         paintLine.setStrokeCap(Paint.Cap.ROUND); // rounded line ends
 
         // set the initial display settings for the background color
@@ -90,12 +90,12 @@ public class DoodleView extends View {
 
     // set the painted line's width
     public void setLineWidth(int width) {
-        paintLine.setStrokeWidth(width);
+        lineWidth = width;
     }
 
     // return the painted line's width
     public int getLineWidth() {
-        return (int) paintLine.getStrokeWidth();
+        return lineWidth;
     }
 
     // perform custom drawing when the DoodleView is refreshed on screen
@@ -159,6 +159,14 @@ public class DoodleView extends View {
 
     // called when the user drags along the screen
     private void touchMoved(MotionEvent event) {
+        float pressure = event.getPressure();  //ranges from 0.0 to 1.0
+        int widthMultiplier = (int) (pressure * 10) ; // convert a number from 0.0 to 1.0 to a number from 0 to 10
+        int updatedLineWidth = lineWidth + widthMultiplier;
+        paintLine.setStrokeWidth(updatedLineWidth);
+
+        System.out.println(String.format("Touch Moved; pressure: %.4f; lineWidth: %d; updatedLineWidth: %d", pressure, lineWidth, updatedLineWidth));
+
+
         // for each of the pointers in the given MotionEvent
         for (int i = 0; i < event.getPointerCount(); i++) {
             // get the pointer ID and pointer index
